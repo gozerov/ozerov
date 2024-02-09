@@ -28,6 +28,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding = true
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -46,5 +49,11 @@ dependencies {
     //Dagger2
     implementation("com.google.dagger:dagger:2.48")
     kapt("com.google.dagger:dagger-compiler:2.48")
+
+    //Navigation
+    implementation("com.github.terrakok:cicerone:7.1")
+
+    //Coil
+    implementation("io.coil-kt:coil:2.5.0")
 
 }

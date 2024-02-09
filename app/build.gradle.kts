@@ -61,4 +61,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
 
     implementation("com.squareup.okhttp3:logging-interceptor")
+
+
+    //Navigation
+    implementation("com.github.terrakok:cicerone:7.1")
 }

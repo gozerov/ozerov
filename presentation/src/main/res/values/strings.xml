@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">tink</string>
+    <string name="navigateup">navigateUp</string>
+    <string name="search">search</string>
+    <string name="hint_search">Поиск</string>
+    <string name="error">error</string>
+    <string name="text_on_network_error">Произошла ошибка при загрузке данных, проверьте подключение к сети</string>
+    <string name="try_again">Повторить</string>
+    <string name="image">image</string>
+    <string name="is_favorite">is favorite</string>
 </resources>
