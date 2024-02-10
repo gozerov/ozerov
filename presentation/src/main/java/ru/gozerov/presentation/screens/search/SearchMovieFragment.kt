@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ru.gozerov.domain.models.MovieCard
 import ru.gozerov.presentation.activity.toolbar.ToolbarState
 import ru.gozerov.presentation.databinding.FragmentSearchMovieBinding
+import ru.gozerov.presentation.navigation.Screens
+import ru.gozerov.presentation.navigation.findNavigationProvider
 import ru.gozerov.presentation.screens.movie_list.MovieListAdapter
 import ru.gozerov.presentation.utils.VerticalMarginItemDecoration
 import ru.gozerov.presentation.utils.changeToolbar
@@ -17,7 +19,9 @@ class SearchMovieFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchMovieBinding
 
-    private val movieListAdapter = MovieListAdapter()
+    private val movieListAdapter = MovieListAdapter {
+        findNavigationProvider().getRouter().navigateTo(Screens.movieDetails())
+    }
 
     val model = MovieCard(
         1115471,
@@ -35,6 +39,7 @@ class SearchMovieFragment : Fragment() {
     ): View {
         binding = FragmentSearchMovieBinding.inflate(inflater, container, false)
         changeToolbar(ToolbarState(isContainerVisible = false))
+        requireActivity().window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         return binding.root
     }
 

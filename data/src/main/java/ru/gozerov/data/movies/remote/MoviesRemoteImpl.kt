@@ -13,7 +13,7 @@ class MoviesRemoteImpl @Inject constructor(
     }
 
     override suspend fun getMovieById(id: Int): MovieData {
-        throw Exception()
+        return moviesApi.getMovieById(id)
     }
 
 }

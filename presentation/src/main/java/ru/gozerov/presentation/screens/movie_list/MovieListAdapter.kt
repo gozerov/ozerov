@@ -10,7 +10,9 @@ import ru.gozerov.domain.models.MovieCard
 import ru.gozerov.presentation.databinding.ItemMovieCardBinding
 import ru.gozerov.presentation.databinding.ItemMovieListBinding
 
-class MovieListAdapter : RecyclerView.Adapter<MovieListAdapter.ViewHolder>(){
+class MovieListAdapter(
+    private val onClick: (id: Int) -> Unit
+) : RecyclerView.Adapter<MovieListAdapter.ViewHolder>(), View.OnClickListener {
 
     inner class ViewHolder(val binding: ItemMovieCardBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -22,7 +24,9 @@ class MovieListAdapter : RecyclerView.Adapter<MovieListAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(ItemMovieCardBinding.inflate(inflater, parent, false))
+        val viewHolder = ViewHolder(ItemMovieCardBinding.inflate(inflater, parent, false))
+        viewHolder.binding.root.setOnClickListener(this)
+        return viewHolder
     }
 
     override fun getItemCount(): Int = data.size
@@ -38,6 +42,12 @@ class MovieListAdapter : RecyclerView.Adapter<MovieListAdapter.ViewHolder>(){
                 transformations(RoundedCornersTransformation(16f))
             }
             imgIsFavorite.visibility = if (item.isFavorite) View.VISIBLE else View.GONE
+        }
+    }
+
+    override fun onClick(v: View?) {
+        (v?.tag as? MovieCard)?.let {
+            onClick.invoke(it.id)
         }
     }
 

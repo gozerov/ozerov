@@ -3,6 +3,7 @@ package ru.gozerov.data.movies.repository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.gozerov.data.movies.models.toMovie
 import ru.gozerov.data.movies.models.toMovieCard
 import ru.gozerov.data.movies.remote.MoviesRemote
 import ru.gozerov.domain.models.Movie
@@ -18,7 +19,7 @@ class MoviesRepositoryImpl @Inject constructor(
         moviesRemote.getTopMovies().map { it.toMovieCard() }
     }
 
-    override suspend fun getMovieById(id: Int): Movie {
-        throw Exception()
+    override suspend fun getMovieById(id: Int): Movie = withContext(Dispatchers.IO){
+        moviesRemote.getMovieById(id).toMovie()
     }
 }

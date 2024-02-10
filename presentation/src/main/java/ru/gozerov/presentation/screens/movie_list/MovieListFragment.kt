@@ -1,12 +1,15 @@
 package ru.gozerov.presentation.screens.movie_list
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -15,13 +18,17 @@ import ru.gozerov.domain.models.MovieCard
 import ru.gozerov.presentation.R
 import ru.gozerov.presentation.activity.toolbar.ToolbarState
 import ru.gozerov.presentation.databinding.FragmentMovieListBinding
+import ru.gozerov.presentation.navigation.Screens
+import ru.gozerov.presentation.navigation.findNavigationProvider
 import ru.gozerov.presentation.utils.changeToolbar
 
 class MovieListFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieListBinding
 
-    private val pagerAdapter = MoviePagerAdapter()
+    private val pagerAdapter = MoviePagerAdapter {
+        findNavigationProvider().getRouter().navigateTo(Screens.movieDetails())
+    }
 
     val model = MovieCard(
         1115471,
@@ -38,6 +45,7 @@ class MovieListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMovieListBinding.inflate(inflater, container, false)
+        requireActivity().window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         return binding.root
     }
 

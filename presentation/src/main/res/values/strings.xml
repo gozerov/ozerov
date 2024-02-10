@@ -9,4 +9,5 @@
     <string name="image">image</string>
     <string name="is_favorite">is favorite</string>
     <string name="not_found">Не найдено</string>
+    <string name="poster">poster</string>
 </resources>

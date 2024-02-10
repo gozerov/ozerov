@@ -9,7 +9,9 @@ import ru.gozerov.domain.models.MovieCard
 import ru.gozerov.presentation.databinding.ItemMovieListBinding
 import ru.gozerov.presentation.utils.VerticalMarginItemDecoration
 
-class MoviePagerAdapter : RecyclerView.Adapter<MoviePagerAdapter.ViewHolder>() {
+class MoviePagerAdapter(
+    private val onMovieClicked: (id: Int) -> Unit
+) : RecyclerView.Adapter<MoviePagerAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemMovieListBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -29,7 +31,7 @@ class MoviePagerAdapter : RecyclerView.Adapter<MoviePagerAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        val listAdapter = MovieListAdapter()
+        val listAdapter = MovieListAdapter(onMovieClicked)
         listAdapter.data = item
         with(holder.binding.root) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

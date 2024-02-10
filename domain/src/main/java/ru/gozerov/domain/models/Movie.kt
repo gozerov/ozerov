@@ -6,6 +6,5 @@ data class Movie(
     val name: String,
     val description: String,
     val genres: List<String>,
-    val countries: List<String>,
-    val isFavorite: Boolean
+    val countries: List<String>
 )
