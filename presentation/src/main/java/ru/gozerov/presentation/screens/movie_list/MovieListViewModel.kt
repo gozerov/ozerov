@@ -1,6 +1,5 @@
 package ru.gozerov.presentation.screens.movie_list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,10 +17,12 @@ class MovieListViewModel @Inject constructor(
     private val _viewState = MutableStateFlow<MovieListState>(MovieListState.Empty())
     val viewState = _viewState.asStateFlow()
 
+    var currentTabType = TabType.TOP
+
     fun handleIntent(intent: MovieListIntent) {
         viewModelScope.launch {
             when (intent) {
-                is MovieListIntent.LoadFilms -> {
+                is MovieListIntent.LoadMovies -> {
                     getAllMovies.execute(
                         arg = Unit,
                         onSuccess = {

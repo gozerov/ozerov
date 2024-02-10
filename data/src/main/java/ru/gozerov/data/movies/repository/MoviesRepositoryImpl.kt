@@ -19,14 +19,23 @@ class MoviesRepositoryImpl @Inject constructor(
 
     override suspend fun getTopMovies(): Pair<String, List<MovieCard>> =
         withContext(Dispatchers.IO) {
-            val movies = moviesRemote.getTopMovies().map { it.toMovieCard() }
-            moviesCache.saveMovies(movies)
-            return@withContext moviesCache.getTopMovies()
+            val cachedMovies = moviesCache.getTopMovies()
+            if (cachedMovies.second.isEmpty()) {
+                val movies = moviesRemote.getTopMovies().map { it.toMovieCard() }
+                moviesCache.saveMovies(movies)
+                return@withContext moviesCache.getTopMovies()
+            } else return@withContext cachedMovies
         }
 
     override suspend fun getFavoriteMovies(): Pair<String, List<MovieCard>> =
         withContext(Dispatchers.IO) {
-            return@withContext moviesCache.getFavoriteMovies()
+            val cachedMovies = moviesCache.getFavoriteMovies()
+            if (cachedMovies.second.isEmpty()) {
+                val movies = moviesRemote.getTopMovies().map { it.toMovieCard() }
+                moviesCache.saveMovies(movies)
+                return@withContext moviesCache.getFavoriteMovies()
+            }
+            else return@withContext cachedMovies
         }
 
     override suspend fun getMovieById(id: Int): Movie = withContext(Dispatchers.IO) {

@@ -39,9 +39,7 @@ class SearchMovieFragment : Fragment() {
         onClick = {
             findNavigationProvider().getRouter().navigateTo(Screens.movieDetails(it))
         },
-        onLongClick = {
-            viewModel.handleIntent(SearchMovieIntent.UpdateMovieByFavorite(it))
-        }
+        onLongClick = { }
     )
 
     override fun onAttach(context: Context) {
