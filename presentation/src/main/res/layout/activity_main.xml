@@ -32,7 +32,8 @@
         app:layout_constraintStart_toEndOf="@id/navigateUp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="18dp"
-        android:layout_marginStart="16dp"/>
+        android:layout_marginStart="16dp"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/searchButton"
@@ -51,6 +52,7 @@
         android:id="@+id/toolbarGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:constraint_referenced_ids="navigateUp, txtToolbarTitle, searchButton" />
 
     <androidx.fragment.app.FragmentContainerView

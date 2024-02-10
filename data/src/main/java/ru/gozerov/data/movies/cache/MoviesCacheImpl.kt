@@ -1,7 +1,8 @@
 package ru.gozerov.data.movies.cache
 
-import kotlinx.coroutines.flow.Flow
+import ru.gozerov.data.movies.cache.room.MovieDB
 import ru.gozerov.data.movies.cache.room.MovieDao
+import ru.gozerov.data.movies.cache.room.toMovieCard
 import ru.gozerov.domain.models.MovieCard
 import javax.inject.Inject
 
@@ -9,14 +10,33 @@ class MoviesCacheImpl @Inject constructor(
     private val movieDao: MovieDao
 ) : MoviesCache {
     override suspend fun saveMovies(movies: List<MovieCard>) {
-        TODO("Not yet implemented")
+        movieDao.saveMovies(movies = movies.map { it.toMovieDB() })
     }
 
-    override suspend fun getMovies(): Flow<MovieCard> {
-        TODO("Not yet implemented")
+    override suspend fun getMovies(): Pair<String, List<MovieCard>> {
+        return "Популярные" to movieDao.getTopMovies().map { it.toMovieCard() }
+    }
+
+    override suspend fun getFavoriteMovies(): Pair<String, List<MovieCard>> {
+        return "Избранное" to movieDao.getFavoriteMovies().map { it.toMovieCard() }
     }
 
     override suspend fun getMovieById(id: Int): MovieCard {
-        TODO("Not yet implemented")
+        return movieDao.getMovieById(id).toMovieCard()
     }
+
+    override suspend fun updateMovie(movieCard: MovieCard): List<Pair<String, List<MovieCard>>> {
+        movieDao.setMovieFavorite(movieCard.toMovieDB().copy(isFavorite = !movieCard.isFavorite))
+        return listOf(getMovies(), getFavoriteMovies())
+    }
+
+    override suspend fun searchMoviesByName(name: String): List<MovieCard> {
+        return movieDao.searchMovies(name).map { it.toMovieCard() }
+    }
+
+    companion object {
+        fun MovieCard.toMovieDB() =
+            MovieDB(id, name, year, genres.joinToString(";"), imageUrl, isFavorite)
+    }
+
 }

@@ -6,7 +6,7 @@ import dagger.Provides
 import ru.gozerov.data.movies.cache.room.MovieDatabase
 
 @Module
-interface RoomModule {
+class RoomModule {
 
     @Provides
     fun provideMovieDao(context: Context) = MovieDatabase.getInstance(context).getMovieDao()

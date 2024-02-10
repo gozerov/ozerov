@@ -6,7 +6,8 @@ import dagger.Module
     includes = [
         AppBindModule::class,
         RetrofitModule::class,
-        RoomModule::class
+        RoomModule::class,
+        ViewModelBindModule::class
     ]
 )
 class AppModule

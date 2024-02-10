@@ -1,54 +1,78 @@
 package ru.gozerov.presentation.screens.movie_list
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import ru.gozerov.domain.models.MovieCard
+import ru.gozerov.presentation.R
 import ru.gozerov.presentation.databinding.ItemMovieCardBinding
-import ru.gozerov.presentation.databinding.ItemMovieListBinding
 
 class MovieListAdapter(
-    private val onClick: (id: Int) -> Unit
-) : RecyclerView.Adapter<MovieListAdapter.ViewHolder>(), View.OnClickListener {
+    private val onClick: (id: Int) -> Unit,
+    private val onLongClick: (id: Int) -> Unit
+) : RecyclerView.Adapter<MovieListAdapter.ViewHolder>(), View.OnClickListener,
+    View.OnLongClickListener {
 
-    inner class ViewHolder(val binding: ItemMovieCardBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(private val binding: ItemMovieCardBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: MovieCard) {
+            with(binding) {
+                root.tag = item
+                txtName.text = item.name
+                txtGenreAndYear.text =
+                    "${item.genres.joinToString { it.replaceFirstChar { c -> c.uppercaseChar() } }} (${item.year})"
+                poster.load(item.imageUrl) {
+                    crossfade(true)
+                    transformations(RoundedCornersTransformation(16f))
+                }
+                imgIsFavorite.visibility =
+                    if (item.isFavorite) View.VISIBLE else View.GONE
+            }
+        }
+    }
 
     var data: List<MovieCard> = emptyList()
         set(value) {
+            val diffCallback = MovieListDiffCallback(field, value)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
             field = value
-            notifyDataSetChanged()
+            diffResult.dispatchUpdatesTo(this)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val viewHolder = ViewHolder(ItemMovieCardBinding.inflate(inflater, parent, false))
-        viewHolder.binding.root.setOnClickListener(this)
-        return viewHolder
+        val binding = ItemMovieCardBinding.inflate(inflater, parent, false)
+        binding.root.setOnClickListener(this)
+        binding.root.setOnLongClickListener(this)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        with(holder.binding) {
-            root.tag = item
-            txtName.text = item.name
-            txtGenreAndYear.text = "${item.genres.joinToString()} (${item.year})"
-            poster.load(item.imageUrl) {
-                crossfade(true)
-                transformations(RoundedCornersTransformation(16f))
-            }
-            imgIsFavorite.visibility = if (item.isFavorite) View.VISIBLE else View.GONE
-        }
+        holder.bind(item)
     }
 
     override fun onClick(v: View?) {
         (v?.tag as? MovieCard)?.let {
             onClick.invoke(it.id)
         }
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        (v?.tag as? MovieCard)?.let {
+            onLongClick.invoke(it.id)
+            return true
+        } ?: return false
     }
 
 
