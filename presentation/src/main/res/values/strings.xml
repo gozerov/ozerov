@@ -8,4 +8,5 @@
     <string name="try_again">Повторить</string>
     <string name="image">image</string>
     <string name="is_favorite">is favorite</string>
+    <string name="not_found">Не найдено</string>
 </resources>

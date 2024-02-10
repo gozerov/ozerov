@@ -24,6 +24,10 @@ class MainActivity : AppCompatActivity(), ToolbarHolder {
         if (savedInstanceState == null) {
             findNavigationProvider().getRouter().newRootScreen(Screens.movieList())
         }
+        binding.searchButton.setOnClickListener {
+            findNavigationProvider().getRouter().navigateTo(Screens.searchMovie())
+        }
+
     }
 
     override fun onResume() {
@@ -37,9 +41,9 @@ class MainActivity : AppCompatActivity(), ToolbarHolder {
     }
 
     override fun onToolbarChange(toolbarState: ToolbarState) {
+        binding.toolbarGroup.visibility = if (toolbarState.isContainerVisible) View.VISIBLE else View.GONE
         binding.navigateUp.visibility = if (toolbarState.isNavUpVisible) View.VISIBLE else View.GONE
         binding.searchButton.visibility = if (toolbarState.isSearchVisible) View.VISIBLE else View.GONE
-        binding.searchField.visibility = if (toolbarState.isSearchFieldVisible) View.VISIBLE else View.GONE
         binding.txtToolbarTitle.text = toolbarState.title
     }
 

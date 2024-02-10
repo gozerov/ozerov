@@ -20,14 +20,6 @@
         android:contentDescription="@string/navigateup"
         android:visibility="gone"/>
 
-    <Space
-        android:id="@+id/toolbarBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <TextView
         android:id="@+id/txtToolbarTitle"
         android:layout_width="wrap_content"
@@ -54,20 +46,11 @@
         android:contentDescription="@string/search"
         android:visibility="gone"/>
 
-    <EditText
-        android:id="@+id/searchField"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/toolbarGroup"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:hint="@string/hint_search"
-        android:inputType="text"
-        app:layout_constraintStart_toEndOf="@id/navigateUp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="24dp"
-        android:visibility="gone"/>
+        app:constraint_referenced_ids="navigateUp, txtToolbarTitle, searchButton" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"

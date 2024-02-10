@@ -55,9 +55,9 @@ class MovieListFragment : Fragment() {
             t.setCustomView(R.layout.item_tab)
             val tab = (t.customView as TextView)
             if (position == 0) {
-                changeToolbar(ToolbarState(title = tab.text.toString(), isSearchVisible = true))
                 tab.text = "Популярные"
                 tab.setTextColor(binding.root.context.getColor(R.color.blue_inactive))
+                changeToolbar(ToolbarState(title = tab.text.toString(), isSearchVisible = true))
             } else {
                 tab.text = "Избранное"
                 tab.setTextColor(binding.root.context.getColor(R.color.blue_active))
