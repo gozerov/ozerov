@@ -7,6 +7,10 @@ interface MoviesRepository : Repository {
 
     suspend fun getTopMovies() : List<MovieCard>
 
+    suspend fun getFavoriteMovies() : List<MovieCard>
+
     suspend fun getMovieById(id: Int) : Movie
+
+    suspend fun searchMovieByName(name: String) : List<MovieCard>
 
 }
