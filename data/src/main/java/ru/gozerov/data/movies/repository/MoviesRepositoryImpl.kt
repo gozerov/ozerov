@@ -19,7 +19,20 @@ class MoviesRepositoryImpl @Inject constructor(
         moviesRemote.getTopMovies().map { it.toMovieCard() }
     }
 
+    override suspend fun getFavoriteMovies(): List<MovieCard> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getMovieById(id: Int): Movie = withContext(Dispatchers.IO){
         moviesRemote.getMovieById(id).toMovie()
     }
+
+    override suspend fun searchMovieByName(name: String): List<MovieCard> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setMovieFavorite(arg: Int) {
+        TODO("Not yet implemented")
+    }
+
 }

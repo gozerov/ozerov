@@ -13,4 +13,6 @@ interface MoviesRepository : Repository {
 
     suspend fun searchMovieByName(name: String) : List<MovieCard>
 
+    suspend fun setMovieFavorite(arg: Int)
+
 }

@@ -8,7 +8,8 @@ data class MovieCardData(
     val year: String,
     val genres: List<Genre>,
     val posterUrlPreview: String,
+    val isFavorite: Boolean
 )
 
 fun MovieCardData.toMovieCard() =
-    MovieCard(filmId, nameRu, year, genres.map { it.genre }, posterUrlPreview, false)
+    MovieCard(filmId, nameRu, year, genres.map { it.genre }, posterUrlPreview, isFavorite)

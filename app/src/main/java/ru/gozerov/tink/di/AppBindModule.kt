@@ -2,6 +2,8 @@ package ru.gozerov.tink.di
 
 import dagger.Binds
 import dagger.Module
+import ru.gozerov.data.movies.cache.MoviesCache
+import ru.gozerov.data.movies.cache.MoviesCacheImpl
 import ru.gozerov.data.movies.remote.MoviesRemote
 import ru.gozerov.data.movies.remote.MoviesRemoteImpl
 import ru.gozerov.data.movies.repository.MoviesRepositoryImpl
@@ -18,5 +20,9 @@ interface AppBindModule {
     @Binds
     @Singleton
     fun bindMoviesRepoImplToGoodsRepo(moviesRepositoryImpl: MoviesRepositoryImpl): MoviesRepository
+
+    @Singleton
+    @Binds
+    fun bindMoviesCacheImplToMoviesCache(moviesCacheImpl: MoviesCacheImpl): MoviesCache
 
 }

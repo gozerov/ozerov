@@ -12,7 +12,7 @@ import ru.gozerov.tink.utils.ApiConstants
 import javax.inject.Singleton
 
 @Module
-class RetrofitModule {
+interface RetrofitModule {
 
     @Provides
     @Singleton
