@@ -1,17 +1,22 @@
 package ru.gozerov.presentation.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.tabs.TabLayout.Tab
+import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import ru.gozerov.presentation.R
 import ru.gozerov.presentation.activity.toolbar.ToolbarHolder
 import ru.gozerov.presentation.activity.toolbar.ToolbarState
 import ru.gozerov.presentation.databinding.ActivityMainBinding
 import ru.gozerov.presentation.navigation.Screens
 import ru.gozerov.presentation.navigation.findNavigationProvider
+import ru.gozerov.presentation.screens.movie_details.MovieDetailsFragment
 import ru.gozerov.presentation.screens.movie_list.TabType
+import ru.gozerov.presentation.utils.convertDpToPx
+
 
 class MainActivity : AppCompatActivity(), ToolbarHolder {
 
@@ -19,10 +24,34 @@ class MainActivity : AppCompatActivity(), ToolbarHolder {
 
     private var tabType = TabType.TOP
 
+    private val onFragmentLifecycleCallback =
+        object : FragmentManager.FragmentLifecycleCallbacks() {
+            override fun onFragmentViewCreated(
+                fm: FragmentManager,
+                fragment: Fragment,
+                v: View,
+                savedInstanceState: Bundle?
+            ) {
+                if (fragment is MovieDetailsFragment) {
+                    binding.navigateUp.updateLayoutParams<MarginLayoutParams> {
+                        this.topMargin = convertDpToPx(40f)
+                    }
+                } else
+                    binding.navigateUp.updateLayoutParams<MarginLayoutParams> {
+                        this.topMargin = convertDpToPx(16f)
+                    }
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupNavigation(savedInstanceState)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(onFragmentLifecycleCallback, false)
+    }
+
+    private fun setupNavigation(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             findNavigationProvider().getRouter().newRootScreen(Screens.movieList())
         }
@@ -32,7 +61,6 @@ class MainActivity : AppCompatActivity(), ToolbarHolder {
         binding.navigateUp.setOnClickListener {
             findNavigationProvider().getRouter().exit()
         }
-
     }
 
     override fun onResume() {
@@ -43,6 +71,11 @@ class MainActivity : AppCompatActivity(), ToolbarHolder {
     override fun onPause() {
         super.onPause()
         findNavigationProvider().removeNavigator()
+    }
+
+    override fun onDestroy() {
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(onFragmentLifecycleCallback)
+        super.onDestroy()
     }
 
     override fun onToolbarChange(toolbarState: ToolbarState) {

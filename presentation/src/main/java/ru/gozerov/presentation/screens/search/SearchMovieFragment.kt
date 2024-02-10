@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.launch
+import ru.gozerov.presentation.R
 import ru.gozerov.presentation.activity.toolbar.ToolbarState
 import ru.gozerov.presentation.databinding.FragmentSearchMovieBinding
 import ru.gozerov.presentation.di.appComponent
@@ -75,19 +76,26 @@ class SearchMovieFragment : Fragment() {
     }
 
     private fun changeStatusBar() {
-        requireActivity().window?.decorView?.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        requireActivity().window?.run {
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            statusBarColor = requireContext().getColor(R.color.white)
+        }
     }
 
     private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect { state ->
-                    when(state) {
-                        is SearchMovieState.Empty -> {}
+                    when (state) {
+                        is SearchMovieState.Empty -> {
+                            binding.txtNotFound.visibility = View.VISIBLE
+                        }
                         is SearchMovieState.SearchedMovies -> {
                             movieListAdapter.data = state.movies
+                            binding.txtNotFound.visibility =
+                                if (state.movies.isEmpty()) View.VISIBLE else View.GONE
                         }
+
                         is SearchMovieState.Error -> {}
                     }
                 }

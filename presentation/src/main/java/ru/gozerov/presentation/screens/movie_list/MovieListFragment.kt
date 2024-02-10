@@ -61,8 +61,10 @@ class MovieListFragment : Fragment() {
     }
 
     private fun changeStatusBar() {
-        requireActivity().window?.decorView?.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        requireActivity().window?.run {
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            statusBarColor = requireContext().getColor(R.color.white)
+        }
     }
 
     private fun observeViewState() {

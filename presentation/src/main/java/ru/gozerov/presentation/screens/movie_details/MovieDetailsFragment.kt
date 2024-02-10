@@ -75,7 +75,6 @@ class MovieDetailsFragment : Fragment() {
                         is MovieDetailsState.SuccessMovie -> {
                             val movie = state.movie
                             binding.poster.load(movie.imageUrl) {
-                                crossfade(true)
                                 scale(Scale.FIT)
                             }
                             val imageLoader = ImageLoader(requireContext())
