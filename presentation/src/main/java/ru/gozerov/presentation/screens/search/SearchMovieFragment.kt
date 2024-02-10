@@ -1,43 +1,53 @@
 package ru.gozerov.presentation.screens.search
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import ru.gozerov.domain.models.MovieCard
+import kotlinx.coroutines.launch
 import ru.gozerov.presentation.activity.toolbar.ToolbarState
 import ru.gozerov.presentation.databinding.FragmentSearchMovieBinding
+import ru.gozerov.presentation.di.appComponent
 import ru.gozerov.presentation.navigation.Screens
 import ru.gozerov.presentation.navigation.findNavigationProvider
 import ru.gozerov.presentation.screens.movie_list.MovieListAdapter
-import ru.gozerov.presentation.screens.movie_list.MoviePagerAdapter
+import ru.gozerov.presentation.screens.movie_list.TabType
+import ru.gozerov.presentation.utils.MultiViewModelFactory
 import ru.gozerov.presentation.utils.VerticalMarginItemDecoration
 import ru.gozerov.presentation.utils.changeToolbar
+import javax.inject.Inject
 
 class SearchMovieFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchMovieBinding
 
-    private val movieListAdapter = MoviePagerAdapter(
-        onMovieClick = {
+    @Inject
+    lateinit var factory: MultiViewModelFactory
+
+    private val viewModel: SearchMovieViewModel by viewModels { factory }
+
+    private val movieListAdapter = MovieListAdapter(
+        onClick = {
             findNavigationProvider().getRouter().navigateTo(Screens.movieDetails(it))
         },
-        onMovieLongClick =  {
-            Log.e("AAA", "adadd")
+        onLongClick = {
+            viewModel.handleIntent(SearchMovieIntent.UpdateMovieByFavorite(it))
         }
     )
 
-    val model = MovieCard(
-        1115471,
-        "Мастер и Маргарита",
-        "2023",
-        listOf("драма", "фэнтези"),
-        "https://kinopoiskapiunofficial.tech/images/posters/kp_small/1115471.jpg",
-        false
-    )
+    override fun onAttach(context: Context) {
+        appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,18 +56,64 @@ class SearchMovieFragment : Fragment() {
     ): View {
         binding = FragmentSearchMovieBinding.inflate(inflater, container, false)
         changeToolbar(ToolbarState(isContainerVisible = false))
-        binding.navigateUp.setOnClickListener {
-            findNavigationProvider().getRouter().exit()
-        }
-        requireActivity().window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        setupNavUp()
+        changeStatusBar()
+        observeState()
+        observeSearchField()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-       // movieListAdapter.data = (0..9).map { model }
         binding.moviesRecyclerView.addItemDecoration(VerticalMarginItemDecoration())
-        binding.moviesRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
+        binding.moviesRecyclerView.layoutManager =
+            LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
         binding.moviesRecyclerView.adapter = movieListAdapter
+    }
+
+    private fun setupNavUp() {
+        binding.navigateUp.setOnClickListener {
+            findNavigationProvider().getRouter().exit()
+        }
+    }
+
+    private fun changeStatusBar() {
+        requireActivity().window?.decorView?.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    }
+
+    private fun observeState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewState.collect { state ->
+                    when(state) {
+                        is SearchMovieState.Empty -> {}
+                        is SearchMovieState.SearchedMovies -> {
+                            movieListAdapter.data = state.movies
+                        }
+                        is SearchMovieState.Error -> {}
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeSearchField() {
+        val tabType = TabType.values()[arguments?.getInt(ARG_TAB_TYPE) ?: 0]
+        binding.searchField.doOnTextChanged { text, _, _, _ ->
+            viewModel.handleIntent(SearchMovieIntent.SearchByName(text.toString(), tabType))
+        }
+    }
+
+    companion object {
+
+        private const val ARG_TAB_TYPE = "tab_type"
+
+        fun newInstance(tabType: TabType): SearchMovieFragment {
+            val fragment = SearchMovieFragment()
+            fragment.arguments = bundleOf(ARG_TAB_TYPE to tabType.ordinal)
+            return fragment
+        }
+
     }
 
 }

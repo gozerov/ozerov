@@ -13,7 +13,7 @@ class MoviesCacheImpl @Inject constructor(
         movieDao.saveMovies(movies = movies.map { it.toMovieDB() })
     }
 
-    override suspend fun getMovies(): Pair<String, List<MovieCard>> {
+    override suspend fun getTopMovies(): Pair<String, List<MovieCard>> {
         return "Популярные" to movieDao.getTopMovies().map { it.toMovieCard() }
     }
 
@@ -27,11 +27,15 @@ class MoviesCacheImpl @Inject constructor(
 
     override suspend fun updateMovie(movieCard: MovieCard): List<Pair<String, List<MovieCard>>> {
         movieDao.setMovieFavorite(movieCard.toMovieDB().copy(isFavorite = !movieCard.isFavorite))
-        return listOf(getMovies(), getFavoriteMovies())
+        return listOf(getTopMovies(), getFavoriteMovies())
     }
 
-    override suspend fun searchMoviesByName(name: String): List<MovieCard> {
+    override suspend fun searchTopMoviesByName(name: String): List<MovieCard> {
         return movieDao.searchMovies(name).map { it.toMovieCard() }
+    }
+
+    override suspend fun searchFavoriteMoviesByName(name: String): List<MovieCard> {
+        return movieDao.searchMovies(name).filter { it.isFavorite }.map { it.toMovieCard() }
     }
 
     companion object {

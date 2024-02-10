@@ -24,7 +24,7 @@ interface MovieDao {
     @Update(MovieDB::class, OnConflictStrategy.REPLACE)
     suspend fun setMovieFavorite(movieDB: MovieDB)
 
-    @Query("SELECT * FROM ${MovieConstants.TABLE_NAME} WHERE name LIKE :name")
+    @Query("SELECT * FROM ${MovieConstants.TABLE_NAME} WHERE name LIKE '%' || :name || '%'")
     fun searchMovies(name: String) : List<MovieDB>
 
 }

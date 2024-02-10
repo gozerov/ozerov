@@ -3,6 +3,7 @@ package ru.gozerov.domain.repositories
 import kotlinx.coroutines.flow.Flow
 import ru.gozerov.domain.models.Movie
 import ru.gozerov.domain.models.MovieCard
+import ru.gozerov.domain.models.NameWithCategory
 
 interface MoviesRepository : Repository {
 
@@ -12,7 +13,7 @@ interface MoviesRepository : Repository {
 
     suspend fun getMovieById(id: Int): Movie
 
-    suspend fun searchMovieByName(name: String): List<MovieCard>
+    suspend fun searchMovieByNameAndCategory(data: NameWithCategory): List<MovieCard>
 
     suspend fun setMovieFavorite(arg: Int) : List<Pair<String, List<MovieCard>>>
 

@@ -89,6 +89,7 @@ class MovieDetailsFragment : Fragment() {
                             setGenres(movie.genres.joinToString { it.replaceFirstChar { c -> c.uppercaseChar() } })
                             setCountries(movie.countries.joinToString { it.replaceFirstChar { c -> c.uppercaseChar() } })
                         }
+
                         is MovieDetailsState.Error -> {
 
                         }

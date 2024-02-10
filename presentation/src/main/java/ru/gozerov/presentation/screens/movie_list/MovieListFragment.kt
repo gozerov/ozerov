@@ -33,9 +33,7 @@ class MovieListFragment : Fragment() {
         onMovieClick = {
             findNavigationProvider().getRouter().navigateTo(Screens.movieDetails(it))
         },
-        onMovieLongClick = {
-            viewModel.handleIntent(MovieListIntent.UpdateMovieByFavorite(it))
-        }
+        onMovieLongClick = {}
     )
 
     @Inject
@@ -72,6 +70,7 @@ class MovieListFragment : Fragment() {
                         is MovieListState.Empty -> {
                             viewModel.handleIntent(MovieListIntent.LoadFilms)
                         }
+
                         is MovieListState.SuccessMovies -> {
                             val pagerData = state.categoryWithMovies.map { it.second }
                             pagerAdapter.data = pagerData
@@ -79,6 +78,7 @@ class MovieListFragment : Fragment() {
                             configureTabsMediator(state.categoryWithMovies.map { it.first })
                             setTabsListener()
                         }
+
                         is MovieListState.SuccessUpdatedMovies -> {
                             val pagerData = state.categoryWithMovies.map { it.second }
                             pagerAdapter.data = pagerData
@@ -100,7 +100,13 @@ class MovieListFragment : Fragment() {
             tab.text = titles[position]
             if (position == currentItem) {
                 tab.setTextColor(binding.root.context.getColor(R.color.blue_inactive))
-                changeToolbar(ToolbarState(title = tab.text.toString(), isSearchVisible = true))
+                changeToolbar(
+                    ToolbarState(
+                        title = tab.text.toString(),
+                        isSearchVisible = true,
+                        currentTabType = if (binding.moviesViewPager.currentItem == 0) TabType.TOP else TabType.FAVORITE
+                    )
+                )
             } else
                 tab.setTextColor(binding.root.context.getColor(R.color.blue_active))
         }.attach()
@@ -112,7 +118,8 @@ class MovieListFragment : Fragment() {
                 changeToolbar(
                     ToolbarState(
                         title = (tab?.customView as TextView).text.toString(),
-                        isSearchVisible = true
+                        isSearchVisible = true,
+                        currentTabType = if (tab.position == 0) TabType.TOP else TabType.FAVORITE
                     )
                 )
                 (tab.customView as TextView).setTextColor(binding.root.context.getColor(R.color.blue_inactive))

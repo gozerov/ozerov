@@ -8,7 +8,7 @@ interface MoviesCache {
 
     suspend fun saveMovies(movies: List<MovieCard>)
 
-    suspend fun getMovies(): Pair<String, List<MovieCard>>
+    suspend fun getTopMovies(): Pair<String, List<MovieCard>>
 
     suspend fun getFavoriteMovies(): Pair<String, List<MovieCard>>
 
@@ -16,6 +16,8 @@ interface MoviesCache {
 
     suspend fun updateMovie(movieCard: MovieCard): List<Pair<String, List<MovieCard>>>
 
-    suspend fun searchMoviesByName(name: String): List<MovieCard>
+    suspend fun searchTopMoviesByName(name: String): List<MovieCard>
+
+    suspend fun searchFavoriteMoviesByName(name: String): List<MovieCard>
 
 }
