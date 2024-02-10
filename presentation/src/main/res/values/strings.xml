@@ -10,4 +10,8 @@
     <string name="is_favorite">is favorite</string>
     <string name="not_found">Не найдено</string>
     <string name="poster">poster</string>
+    <string name="genres">Жанры: %1$s</string>
+    <string name="countries">Страны: %1$s</string>
+    <string name="genre_c">Жанры:</string>
+    <string name="country_c">Страны:</string>
 </resources>

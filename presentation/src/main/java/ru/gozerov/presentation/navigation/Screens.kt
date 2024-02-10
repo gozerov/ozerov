@@ -9,7 +9,7 @@ object Screens {
 
     fun movieList() = FragmentScreen { MovieListFragment() }
 
-    fun movieDetails() = FragmentScreen { MovieDetailsFragment() }
+    fun movieDetails(id: Int) = FragmentScreen { MovieDetailsFragment.newInstance(id) }
 
     fun searchMovie() = FragmentScreen { SearchMovieFragment() }
 

@@ -5,6 +5,7 @@ import dagger.Binds
 import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.IntoMap
+import ru.gozerov.presentation.screens.movie_details.MovieDetailsViewModel
 import ru.gozerov.presentation.screens.movie_list.MovieListViewModel
 import kotlin.reflect.KClass
 
@@ -14,5 +15,9 @@ interface ViewModelBindModule {
     @Binds
     @[IntoMap ViewModelKey(MovieListViewModel::class)]
     fun provideMovieListViewModel(movieListViewModel: MovieListViewModel) : ViewModel
+
+    @Binds
+    @[IntoMap ViewModelKey(MovieDetailsViewModel::class)]
+    fun provideMovieDetailsViewModel(movieDetailsViewModel: MovieDetailsViewModel) : ViewModel
 
 }

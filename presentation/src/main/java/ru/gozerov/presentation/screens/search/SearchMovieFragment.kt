@@ -23,7 +23,7 @@ class SearchMovieFragment : Fragment() {
 
     private val movieListAdapter = MoviePagerAdapter(
         onMovieClick = {
-            findNavigationProvider().getRouter().navigateTo(Screens.movieDetails())
+            findNavigationProvider().getRouter().navigateTo(Screens.movieDetails(it))
         },
         onMovieLongClick =  {
             Log.e("AAA", "adadd")

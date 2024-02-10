@@ -26,7 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/poster"
@@ -43,7 +43,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtName"
             android:layout_marginHorizontal="32dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/black_60"/>
 
         <TextView
@@ -65,7 +65,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtGenres"
             android:layout_marginHorizontal="32dp"
-            android:paddingVertical="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="16dp"
             android:textColor="@color/black_60"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

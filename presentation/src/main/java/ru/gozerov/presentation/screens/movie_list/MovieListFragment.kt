@@ -31,7 +31,7 @@ class MovieListFragment : Fragment() {
 
     private val pagerAdapter = MoviePagerAdapter(
         onMovieClick = {
-            findNavigationProvider().getRouter().navigateTo(Screens.movieDetails())
+            findNavigationProvider().getRouter().navigateTo(Screens.movieDetails(it))
         },
         onMovieLongClick = {
             viewModel.handleIntent(MovieListIntent.UpdateMovieByFavorite(it))
