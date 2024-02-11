@@ -1,5 +1,6 @@
 package ru.gozerov.data.movies.repository
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.gozerov.data.movies.cache.MoviesCache
@@ -19,23 +20,20 @@ class MoviesRepositoryImpl @Inject constructor(
 
     override suspend fun getTopMovies(): Pair<String, List<MovieCard>> =
         withContext(Dispatchers.IO) {
-            val cachedMovies = moviesCache.getTopMovies()
-            if (cachedMovies.second.isEmpty()) {
-                val movies = moviesRemote.getTopMovies().map { it.toMovieCard() }
-                moviesCache.saveMovies(movies)
-                return@withContext moviesCache.getTopMovies()
-            } else return@withContext cachedMovies
+            val movies = moviesRemote.getTopMovies().map { it.toMovieCard() }.toMutableList()
+            val favoriteMovies = moviesCache.getFavoriteMovies().second
+            favoriteMovies.forEach { favoriteCard ->
+                val ind = movies.indexOfFirst { it.id == favoriteCard.id }
+                movies.removeAt(ind)
+                movies.add(ind, favoriteCard)
+            }
+            moviesCache.saveMovies(movies)
+            return@withContext moviesCache.getTopMovies()
         }
 
     override suspend fun getFavoriteMovies(): Pair<String, List<MovieCard>> =
         withContext(Dispatchers.IO) {
-            val cachedMovies = moviesCache.getFavoriteMovies()
-            if (cachedMovies.second.isEmpty()) {
-                val movies = moviesRemote.getTopMovies().map { it.toMovieCard() }
-                moviesCache.saveMovies(movies)
-                return@withContext moviesCache.getFavoriteMovies()
-            }
-            else return@withContext cachedMovies
+            return@withContext moviesCache.getFavoriteMovies()
         }
 
     override suspend fun getMovieById(id: Int): Movie = withContext(Dispatchers.IO) {
@@ -53,8 +51,7 @@ class MoviesRepositoryImpl @Inject constructor(
 
     override suspend fun setMovieFavorite(arg: Int): List<Pair<String, List<MovieCard>>> =
         withContext(Dispatchers.IO) {
-            val movie = moviesCache.getMovieById(arg)
-            return@withContext moviesCache.updateMovie(movie)
+            return@withContext moviesCache.updateMovie(arg)
         }
 
 }

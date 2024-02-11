@@ -1,5 +1,7 @@
 package ru.gozerov.data.movies.cache
 
+import ru.gozerov.data.movies.cache.room.FavoriteMovieDB
+import ru.gozerov.data.movies.cache.room.FavoriteMovieDao
 import ru.gozerov.data.movies.cache.room.MovieDB
 import ru.gozerov.data.movies.cache.room.MovieDao
 import ru.gozerov.data.movies.cache.room.toMovieCard
@@ -7,7 +9,8 @@ import ru.gozerov.domain.models.MovieCard
 import javax.inject.Inject
 
 class MoviesCacheImpl @Inject constructor(
-    private val movieDao: MovieDao
+    private val movieDao: MovieDao,
+    private val favoriteMovieDao: FavoriteMovieDao
 ) : MoviesCache {
     override suspend fun saveMovies(movies: List<MovieCard>) {
         movieDao.saveMovies(movies = movies.map { it.toMovieDB() })
@@ -18,15 +21,21 @@ class MoviesCacheImpl @Inject constructor(
     }
 
     override suspend fun getFavoriteMovies(): Pair<String, List<MovieCard>> {
-        return "Избранное" to movieDao.getFavoriteMovies().map { it.toMovieCard() }
+        return "Избранное" to favoriteMovieDao.getFavoriteMovies().map { it.toMovieCard() }
     }
 
     override suspend fun getMovieById(id: Int): MovieCard {
         return movieDao.getMovieById(id).toMovieCard()
     }
 
-    override suspend fun updateMovie(movieCard: MovieCard): List<Pair<String, List<MovieCard>>> {
-        movieDao.setMovieFavorite(movieCard.toMovieDB().copy(isFavorite = !movieCard.isFavorite))
+    override suspend fun updateMovie(id: Int): List<Pair<String, List<MovieCard>>> {
+        val movie = movieDao.getMovieById(id)
+        val favoriteMovie = favoriteMovieDao.getMovieById(id)
+        if (favoriteMovie == null)
+            favoriteMovieDao.setMovieFavorite(movie.toFavoriteMovieDB())
+        else
+            favoriteMovieDao.removeMovie(favoriteMovie)
+        movieDao.setMovieFavorite(movie.copy(isFavorite = !movie.isFavorite))
         return listOf(getTopMovies(), getFavoriteMovies())
     }
 
@@ -35,12 +44,17 @@ class MoviesCacheImpl @Inject constructor(
     }
 
     override suspend fun searchFavoriteMoviesByName(name: String): List<MovieCard> {
-        return movieDao.searchMovies(name).filter { it.isFavorite }.map { it.toMovieCard() }
+        return favoriteMovieDao.searchMovies(name).map { it.toMovieCard() }
     }
 
     companion object {
         fun MovieCard.toMovieDB() =
             MovieDB(id, name, year, genres.joinToString(";"), imageUrl, isFavorite)
+
+        fun FavoriteMovieDB.toMovieCard() = MovieCard(id, name, year, genres.split(';'), posterUrl, isFavorite)
+
+        fun MovieDB.toFavoriteMovieDB() = FavoriteMovieDB(id, name, year, genres, posterUrl, true)
+
     }
 
 }

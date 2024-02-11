@@ -11,4 +11,7 @@ class RoomModule {
     @Provides
     fun provideMovieDao(context: Context) = MovieDatabase.getInstance(context).getMovieDao()
 
+    @Provides
+    fun provideFavoriteMovieDao(context: Context) = MovieDatabase.getInstance(context).getFavoriteMovieDao()
+
 }

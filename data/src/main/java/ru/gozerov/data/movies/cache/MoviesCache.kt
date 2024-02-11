@@ -1,7 +1,5 @@
 package ru.gozerov.data.movies.cache
 
-import kotlinx.coroutines.flow.Flow
-import ru.gozerov.data.movies.cache.room.MovieDB
 import ru.gozerov.domain.models.MovieCard
 
 interface MoviesCache {
@@ -14,7 +12,7 @@ interface MoviesCache {
 
     suspend fun getMovieById(id: Int): MovieCard
 
-    suspend fun updateMovie(movieCard: MovieCard): List<Pair<String, List<MovieCard>>>
+    suspend fun updateMovie(id: Int): List<Pair<String, List<MovieCard>>>
 
     suspend fun searchTopMoviesByName(name: String): List<MovieCard>
 

@@ -4,6 +4,8 @@ object MovieConstants {
 
     const val DB_NAME = "MovieDatabase"
 
-    const val TABLE_NAME = "movies"
+    const val MOVIES_TABLE_NAME = "movies"
+
+    const val FAVORITE_MOVIES_TABLE_NAME = "favorite_movies"
 
 }
