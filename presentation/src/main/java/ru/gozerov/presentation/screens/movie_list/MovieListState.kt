@@ -8,11 +8,11 @@ sealed class MovieListState {
     class Empty : MovieListState()
 
     class SuccessMovies(
-        val movieListData: List<Pair<String, List<MovieListData>>>
+        val movieListData: List<MovieListData>
     ) : MovieListState()
 
     class SuccessUpdatedMovies(
-        val categoryWithMovies: List<Pair<String, List<MovieCard>>>
+        val movieListData: List<MovieListData>
     ) : MovieListState()
 
     class Error(

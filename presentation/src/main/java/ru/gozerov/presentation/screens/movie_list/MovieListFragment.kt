@@ -34,6 +34,9 @@ class MovieListFragment : Fragment() {
         },
         onMovieLongClick = {
             viewModel.handleIntent(MovieListIntent.UpdateMovieByFavorite(it))
+        },
+        onTryAgainClick = {
+            viewModel.handleIntent(MovieListIntent.LoadMovies)
         }
     )
 
@@ -79,19 +82,19 @@ class MovieListFragment : Fragment() {
 
                         is MovieListState.SuccessMovies -> {
                             renderVisibility()
-                            val pagerData = state.movieListData.map { it.second }
+                            val pagerData = state.movieListData
                             pagerAdapter.data = pagerData
                             binding.moviesViewPager.adapter = pagerAdapter
                             binding.moviesViewPager.currentItem = viewModel.currentTabType.ordinal
-                            val titles = state.movieListData.map { it.first }
+                            val titles = state.movieListData.map { it.tabName }
                             configureTabsMediator()
                             setPageListener(titles)
                         }
 
                         is MovieListState.SuccessUpdatedMovies -> {
                             renderVisibility()
-                            val pagerData = state.categoryWithMovies.map { it.second }
-                            val titles = state.categoryWithMovies.map { it.first }
+                            val pagerData = state.movieListData
+                            val titles = state.movieListData.map { it.tabName }
                             pagerAdapter.data = pagerData
                             if (binding.moviesViewPager.adapter == null) {
                                 binding.moviesViewPager.adapter = pagerAdapter

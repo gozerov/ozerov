@@ -1,29 +1,25 @@
 package ru.gozerov.domain.usecases
 
-import kotlinx.coroutines.flow.Flow
-import ru.gozerov.domain.models.ErrorMovie
-import ru.gozerov.domain.models.MovieCard
 import ru.gozerov.domain.models.MovieListData
 import ru.gozerov.domain.repositories.MoviesRepository
-import java.lang.Exception
 import javax.inject.Inject
 
 class GetAllMovies @Inject constructor(
     private val moviesRepository: MoviesRepository
-) : UseCase<Unit, List<Pair<String, List<MovieListData>>>>() {
+) : UseCase<Unit, List<MovieListData>>() {
 
-    override suspend fun loadData(arg: Unit): List<Pair<String, List<MovieListData>>> {
-        val topMovies: Pair<String, List<MovieListData>> = try {
+    override suspend fun loadData(arg: Unit): List<MovieListData> {
+        val topMovies: MovieListData = try {
             val movies = moviesRepository.getTopMovies()
-            movies.first to movies.second
+            MovieListData.MovieList(movies.first, movies.second)
         } catch (e: Exception) {
-            "Популярные" to listOf(ErrorMovie("Популярные"))
+            MovieListData.ErrorMovie("Популярные")
         }
-        val favoriteMovies = try {
+        val favoriteMovies: MovieListData = try {
             val movies = moviesRepository.getFavoriteMovies()
-            movies.first to movies.second
+            MovieListData.MovieList(movies.first, movies.second)
         } catch (e: Exception) {
-            "Избранное" to listOf(ErrorMovie("Избранное"))
+            MovieListData.ErrorMovie("Избранное")
         }
         return listOf(topMovies, favoriteMovies)
     }
