@@ -1,4 +1,4 @@
-package ru.gozerov.presentation.screens.movie_list
+package ru.gozerov.presentation.screens.movie_list.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +9,7 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import ru.gozerov.domain.models.MovieCard
 import ru.gozerov.presentation.databinding.ItemMovieCardBinding
+import ru.gozerov.presentation.screens.movie_list.MovieListDiffCallback
 
 class MovieListAdapter(
     private val onClick: (id: Int) -> Unit,

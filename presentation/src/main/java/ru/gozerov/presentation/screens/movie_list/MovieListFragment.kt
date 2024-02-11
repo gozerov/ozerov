@@ -20,6 +20,7 @@ import ru.gozerov.presentation.databinding.FragmentMovieListBinding
 import ru.gozerov.presentation.di.appComponent
 import ru.gozerov.presentation.navigation.Screens
 import ru.gozerov.presentation.navigation.findNavigationProvider
+import ru.gozerov.presentation.screens.movie_list.adapters.MoviePagerAdapter
 import ru.gozerov.presentation.utils.MultiViewModelFactory
 import ru.gozerov.presentation.utils.changeToolbar
 import javax.inject.Inject

@@ -1,6 +1,5 @@
 package ru.gozerov.domain.repositories
 
-import kotlinx.coroutines.flow.Flow
 import ru.gozerov.domain.models.Movie
 import ru.gozerov.domain.models.MovieCard
 import ru.gozerov.domain.models.NameWithCategory

@@ -27,7 +27,7 @@
         android:inputType="text"
         android:textColorHint="@color/black_60"
         android:textColor="@color/black_60"
-        android:textCursorDrawable="@color/black_60"
+        android:textCursorDrawable="@drawable/custom_cursor"
         app:layout_constraintStart_toEndOf="@id/navigateUp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

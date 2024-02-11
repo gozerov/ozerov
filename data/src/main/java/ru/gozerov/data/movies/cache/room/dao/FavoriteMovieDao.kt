@@ -1,9 +1,12 @@
-package ru.gozerov.data.movies.cache.room
+package ru.gozerov.data.movies.cache.room.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import ru.gozerov.data.movies.cache.room.MovieConstants
+import ru.gozerov.data.movies.cache.room.entity.FavoriteMovieDB
+import ru.gozerov.data.movies.cache.room.entity.MovieDB
 
 @Dao
 interface FavoriteMovieDao {

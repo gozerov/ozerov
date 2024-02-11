@@ -1,10 +1,10 @@
 package ru.gozerov.data.movies.cache
 
-import ru.gozerov.data.movies.cache.room.FavoriteMovieDB
-import ru.gozerov.data.movies.cache.room.FavoriteMovieDao
-import ru.gozerov.data.movies.cache.room.MovieDB
-import ru.gozerov.data.movies.cache.room.MovieDao
-import ru.gozerov.data.movies.cache.room.toMovieCard
+import ru.gozerov.data.movies.cache.room.entity.FavoriteMovieDB
+import ru.gozerov.data.movies.cache.room.dao.FavoriteMovieDao
+import ru.gozerov.data.movies.cache.room.entity.MovieDB
+import ru.gozerov.data.movies.cache.room.dao.MovieDao
+import ru.gozerov.data.movies.cache.room.entity.toMovieCard
 import ru.gozerov.domain.models.MovieCard
 import javax.inject.Inject
 

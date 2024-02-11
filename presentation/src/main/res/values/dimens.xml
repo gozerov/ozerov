@@ -4,6 +4,7 @@
     <dimen name="margin_24">24dp</dimen>
     <dimen name="margin_16">16dp</dimen>
     <dimen name="margin_40">40dp</dimen>
+    <dimen name="margin_64">64dp</dimen>
     <dimen name="button_width">136dp</dimen>
     <dimen name="button_height">52dp</dimen>
 </resources>

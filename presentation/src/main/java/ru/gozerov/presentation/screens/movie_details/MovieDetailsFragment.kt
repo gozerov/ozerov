@@ -16,9 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import coil.ImageLoader
 import coil.load
-import coil.request.ImageRequest
 import coil.size.Scale
 import kotlinx.coroutines.launch
 import ru.gozerov.presentation.R
@@ -28,7 +26,6 @@ import ru.gozerov.presentation.di.appComponent
 import ru.gozerov.presentation.utils.MultiViewModelFactory
 import ru.gozerov.presentation.utils.changeToolbar
 import javax.inject.Inject
-
 
 class MovieDetailsFragment : Fragment() {
 
@@ -78,13 +75,8 @@ class MovieDetailsFragment : Fragment() {
                             val movie = state.movie
                             binding.poster.load(movie.imageUrl) {
                                 scale(Scale.FIT)
+                                crossfade(200)
                             }
-                            val imageLoader = ImageLoader(requireContext())
-                            val request = ImageRequest.Builder(requireContext())
-                                .data(movie.imageUrl)
-                                .build()
-                            val drawable = imageLoader.enqueue(request).job.await()
-                            binding.poster.setImageDrawable(drawable.drawable)
                             binding.txtName.text = movie.name
                             binding.txtDescription.text = movie.description
                             setGenres(movie.genres.joinToString { it.replaceFirstChar { c -> c.uppercaseChar() } })

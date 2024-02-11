@@ -1,10 +1,12 @@
-package ru.gozerov.data.movies.cache.room
+package ru.gozerov.data.movies.cache.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import ru.gozerov.data.movies.cache.room.MovieConstants
+import ru.gozerov.data.movies.cache.room.entity.MovieDB
 
 @Dao
 interface MovieDao {

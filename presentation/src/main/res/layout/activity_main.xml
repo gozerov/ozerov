@@ -53,7 +53,7 @@
         android:id="@+id/toolbarGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         app:constraint_referenced_ids="navigateUp, txtToolbarTitle, searchButton" />
 
     <androidx.fragment.app.FragmentContainerView

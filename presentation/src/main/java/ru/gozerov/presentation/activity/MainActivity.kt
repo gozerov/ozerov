@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(), ToolbarHolder {
             ) {
                 if (fragment is MovieDetailsFragment) {
                     binding.navigateUp.updateLayoutParams<MarginLayoutParams> {
-                        this.topMargin = resources.getDimension(R.dimen.margin_40).toInt()
+                        this.topMargin = resources.getDimension(R.dimen.margin_64).toInt()
                     }
                 } else
                     binding.navigateUp.updateLayoutParams<MarginLayoutParams> {

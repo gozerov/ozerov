@@ -3,14 +3,7 @@
     <style name="Base.Theme.Tink" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <item name="colorPrimary">@color/blue_active</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar color. -->
-        <item name="colorPrimaryVariant">@color/blue_active</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/blue_inactive</item>
-        <item name="colorSecondaryVariant">@color/white</item>
         <item name="android:statusBarColor">@color/white</item>
     </style>
 

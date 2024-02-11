@@ -1,12 +1,12 @@
-package ru.gozerov.data.movies.cache.room
+package ru.gozerov.data.movies.cache.room.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.gozerov.domain.models.MovieCard
+import ru.gozerov.data.movies.cache.room.MovieConstants
 
-@Entity(tableName = MovieConstants.MOVIES_TABLE_NAME)
-data class MovieDB(
+@Entity(tableName = MovieConstants.FAVORITE_MOVIES_TABLE_NAME)
+data class FavoriteMovieDB(
     @PrimaryKey
     val id: Int,
 
@@ -25,5 +25,3 @@ data class MovieDB(
     @ColumnInfo(name = "is_favorite")
     val isFavorite: Boolean
 )
-
-fun MovieDB.toMovieCard() = MovieCard(id, name, year, genres.split(';'), posterUrl, isFavorite)

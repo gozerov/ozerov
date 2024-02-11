@@ -20,7 +20,7 @@ import ru.gozerov.presentation.databinding.FragmentSearchMovieBinding
 import ru.gozerov.presentation.di.appComponent
 import ru.gozerov.presentation.navigation.Screens
 import ru.gozerov.presentation.navigation.findNavigationProvider
-import ru.gozerov.presentation.screens.movie_list.MovieListAdapter
+import ru.gozerov.presentation.screens.movie_list.adapters.MovieListAdapter
 import ru.gozerov.presentation.screens.movie_list.TabType
 import ru.gozerov.presentation.utils.MultiViewModelFactory
 import ru.gozerov.presentation.utils.VerticalMarginItemDecoration

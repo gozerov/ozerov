@@ -1,4 +1,4 @@
-package ru.gozerov.presentation.screens.movie_list
+package ru.gozerov.presentation.screens.movie_list.adapters
 
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -60,7 +60,6 @@ class MoviePagerAdapter(
         return when(data[position]) {
             is MovieListData.MovieList -> TYPE_LIST
             is MovieListData.ErrorMovie -> TYPE_ERROR
-            else -> throw (ClassNotFoundException("Illegal viewType!"))
         }
     }
 
