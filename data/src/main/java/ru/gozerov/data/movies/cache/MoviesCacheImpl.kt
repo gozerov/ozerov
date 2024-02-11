@@ -49,11 +49,11 @@ class MoviesCacheImpl @Inject constructor(
 
     companion object {
         fun MovieCard.toMovieDB() =
-            MovieDB(id, name, year, genres.joinToString(";"), imageUrl, isFavorite)
+            MovieDB(id, name, year, genre, imageUrl, isFavorite)
 
-        fun FavoriteMovieDB.toMovieCard() = MovieCard(id, name, year, genres.split(';'), posterUrl, isFavorite)
+        fun FavoriteMovieDB.toMovieCard() = MovieCard(id, name, year, genre, posterUrl, isFavorite)
 
-        fun MovieDB.toFavoriteMovieDB() = FavoriteMovieDB(id, name, year, genres, posterUrl, true)
+        fun MovieDB.toFavoriteMovieDB() = FavoriteMovieDB(id, name, year, genre, posterUrl, true)
 
     }
 

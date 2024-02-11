@@ -1,4 +1,4 @@
-package ru.gozerov.presentation.screens.movie_list
+package ru.gozerov.presentation.screens.movie_list.adapters
 
 import androidx.recyclerview.widget.DiffUtil
 import ru.gozerov.domain.models.MovieCard

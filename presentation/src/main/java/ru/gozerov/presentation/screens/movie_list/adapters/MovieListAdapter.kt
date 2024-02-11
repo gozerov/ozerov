@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import ru.gozerov.domain.models.MovieCard
+import ru.gozerov.presentation.R
 import ru.gozerov.presentation.databinding.ItemMovieCardBinding
-import ru.gozerov.presentation.screens.movie_list.MovieListDiffCallback
 
 class MovieListAdapter(
     private val onClick: (id: Int) -> Unit,
@@ -23,8 +23,7 @@ class MovieListAdapter(
             with(binding) {
                 root.tag = item
                 txtName.text = item.name
-                txtGenreAndYear.text =
-                    "${item.genres.joinToString { it.replaceFirstChar { c -> c.uppercaseChar() } }} (${item.year})"
+                txtGenreAndYear.text = root.context.getString(R.string.genre_and_year, item.genre, item.year)
                 poster.load(item.imageUrl) {
                     crossfade(true)
                     transformations(RoundedCornersTransformation(16f))

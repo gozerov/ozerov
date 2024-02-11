@@ -14,4 +14,5 @@
     <string name="countries">Страны: %1$s</string>
     <string name="genre_c">Жанры:</string>
     <string name="country_c">Страны:</string>
+    <string name="genre_and_year">%1$s (%2$s)</string>
 </resources>

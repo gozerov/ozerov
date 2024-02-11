@@ -16,8 +16,8 @@ data class FavoriteMovieDB(
     @ColumnInfo(name = "year")
     val year: String,
 
-    @ColumnInfo(name = "genres")
-    val genres: String,
+    @ColumnInfo(name = "genre")
+    val genre: String,
 
     @ColumnInfo(name = "poster_url")
     val posterUrl: String,

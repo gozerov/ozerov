@@ -12,4 +12,11 @@ data class MovieCardData(
 )
 
 fun MovieCardData.toMovieCard() =
-    MovieCard(filmId, nameRu, year, genres.map { it.genre }, posterUrlPreview, isFavorite)
+    MovieCard(
+        filmId,
+        nameRu,
+        year,
+        genres.first().genre.replaceFirstChar { it.uppercaseChar() },
+        posterUrlPreview,
+        isFavorite
+    )

@@ -17,8 +17,8 @@ data class MovieDB(
     @ColumnInfo(name = "year")
     val year: String,
 
-    @ColumnInfo(name = "genres")
-    val genres: String,
+    @ColumnInfo(name = "genre")
+    val genre: String,
 
     @ColumnInfo(name = "poster_url")
     val posterUrl: String,
@@ -27,4 +27,4 @@ data class MovieDB(
     val isFavorite: Boolean
 )
 
-fun MovieDB.toMovieCard() = MovieCard(id, name, year, genres.split(';'), posterUrl, isFavorite)
+fun MovieDB.toMovieCard() = MovieCard(id, name, year, genre, posterUrl, isFavorite)
