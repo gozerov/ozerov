@@ -61,4 +61,47 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/item_movie_card"/>
 
+    <ImageView
+        android:id="@+id/imgCloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/error"
+        android:src="@drawable/cloud"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtNetworkError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/text_on_network_error"
+        android:textColor="@color/blue_active"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgCloud" />
+
+    <Button
+        android:id="@+id/tryAgainButton"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/blue_active"
+        android:text="@string/try_again"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtNetworkError" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/tryAgainGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="imgCloud, txtNetworkError, tryAgainButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

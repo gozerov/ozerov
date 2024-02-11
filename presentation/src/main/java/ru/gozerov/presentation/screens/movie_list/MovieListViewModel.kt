@@ -27,6 +27,9 @@ class MovieListViewModel @Inject constructor(
                         arg = Unit,
                         onSuccess = {
                             _viewState.emit(MovieListState.SuccessMovies(it))
+                        },
+                        onError = {
+                            _viewState.emit(MovieListState.Error(it.message.toString()))
                         }
                     )
                 }
@@ -35,6 +38,9 @@ class MovieListViewModel @Inject constructor(
                         arg = intent.id,
                         onSuccess = {
                             _viewState.emit(MovieListState.SuccessUpdatedMovies(it))
+                        },
+                        onError = {
+                            _viewState.emit(MovieListState.Error(it.message.toString()))
                         }
                     )
                 }

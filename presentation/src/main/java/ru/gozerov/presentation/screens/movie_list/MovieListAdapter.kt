@@ -1,28 +1,28 @@
 package ru.gozerov.presentation.screens.movie_list
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.children
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import ru.gozerov.domain.models.ErrorMovie
 import ru.gozerov.domain.models.MovieCard
-import ru.gozerov.presentation.R
+import ru.gozerov.domain.models.MovieListData
 import ru.gozerov.presentation.databinding.ItemMovieCardBinding
+import ru.gozerov.presentation.databinding.LayoutErrorBinding
 
 class MovieListAdapter(
     private val onClick: (id: Int) -> Unit,
     private val onLongClick: (id: Int) -> Unit
-) : RecyclerView.Adapter<MovieListAdapter.ViewHolder>(), View.OnClickListener,
+) : RecyclerView.Adapter<MovieListAdapter.MovieListViewHolder>(), View.OnClickListener,
     View.OnLongClickListener {
 
-    inner class ViewHolder(private val binding: ItemMovieCardBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    abstract class MovieListViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    inner class MovieCardViewHolder(private val binding: ItemMovieCardBinding) :
+        MovieListViewHolder(binding.root) {
         fun bind(item: MovieCard) {
             with(binding) {
                 root.tag = item
@@ -39,27 +39,61 @@ class MovieListAdapter(
         }
     }
 
-    var data: List<MovieCard> = emptyList()
-        set(value) {
-            val diffCallback = MovieListDiffCallback(field, value)
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            field = value
-            diffResult.dispatchUpdatesTo(this)
+    inner class ErrorViewHolder(private val binding: LayoutErrorBinding) :
+        MovieListViewHolder(binding.root) {
+        fun bind() {
+            binding.tryAgainGroup.visibility = View.VISIBLE
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    }
+
+    var data: List<MovieListData> = emptyList()
+        set(value) {
+            if (value.isNotEmpty() && value.first() is MovieCard) {
+                val diffCallback =
+                    MovieListDiffCallback(field as List<MovieCard>, value as List<MovieCard>)
+                val diffResult = DiffUtil.calculateDiff(diffCallback)
+                field = value
+                diffResult.dispatchUpdatesTo(this)
+            }
+            else if (value.isNotEmpty() && value.first() is ErrorMovie) {
+                field = value
+                notifyDataSetChanged()
+            }
+        }
+
+    override fun getItemViewType(position: Int): Int {
+        return when(data[position]) {
+            is MovieCard -> 0
+            is ErrorMovie -> 1
+            else -> throw (ClassNotFoundException("Illegal viewType!"))
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemMovieCardBinding.inflate(inflater, parent, false)
-        binding.root.setOnClickListener(this)
-        binding.root.setOnLongClickListener(this)
-        return ViewHolder(binding)
+        if (viewType == 0) {
+            val binding = ItemMovieCardBinding.inflate(inflater, parent, false)
+            binding.root.setOnClickListener(this)
+            binding.root.setOnLongClickListener(this)
+            return MovieCardViewHolder(binding)
+        }
+        else {
+            val binding = LayoutErrorBinding.inflate(inflater, parent, false)
+            return ErrorViewHolder(binding)
+        }
+
     }
 
     override fun getItemCount(): Int = data.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
         val item = data[position]
-        holder.bind(item)
+        if (holder is MovieCardViewHolder) {
+            holder.bind(item as MovieCard)
+        }
+        else if (holder is ErrorViewHolder)
+            holder.bind()
     }
 
     override fun onClick(v: View?) {

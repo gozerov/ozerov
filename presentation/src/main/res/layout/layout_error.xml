@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/tryAgainGroup"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:visibility="gone">
+
+    <ImageView
+        android:id="@+id/imgCloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/error"
+        android:src="@drawable/cloud"/>
+
+    <TextView
+        android:id="@+id/txtNetworkError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/text_on_network_error"
+        android:textColor="@color/blue_active"/>
+
+    <Button
+        android:id="@+id/tryAgainButton"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/blue_active"
+        android:text="@string/try_again"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

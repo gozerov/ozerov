@@ -7,4 +7,4 @@ data class MovieCard(
     val genres: List<String>,
     val imageUrl: String,
     val isFavorite: Boolean
-)
+) : MovieListData

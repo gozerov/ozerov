@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.gozerov.domain.models.MovieCard
+import ru.gozerov.domain.models.MovieListData
 import ru.gozerov.presentation.databinding.ItemMovieListBinding
 import ru.gozerov.presentation.utils.VerticalMarginItemDecoration
 
@@ -18,7 +19,7 @@ class MoviePagerAdapter(
     inner class ViewHolder(val binding: ItemMovieListBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    var data: List<List<MovieCard>> = emptyList()
+    var data: List<List<MovieListData>> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()

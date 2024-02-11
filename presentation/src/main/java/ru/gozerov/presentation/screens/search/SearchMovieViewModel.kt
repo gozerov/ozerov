@@ -11,8 +11,7 @@ import ru.gozerov.domain.usecases.SetMovieFavorite
 import javax.inject.Inject
 
 class SearchMovieViewModel @Inject constructor(
-    private val searchMovieByName: SearchMovie,
-    private val setMovieFavorite: SetMovieFavorite
+    private val searchMovieByName: SearchMovie
 ): ViewModel() {
 
     private val _viewState = MutableStateFlow<SearchMovieState>(SearchMovieState.Empty)
@@ -26,13 +25,9 @@ class SearchMovieViewModel @Inject constructor(
                         arg = NameWithCategory(intent.name, intent.tabType.ordinal),
                         onSuccess = {
                             _viewState.emit(SearchMovieState.SearchedMovies(it))
-                        }
-                    )
-                }
-                is SearchMovieIntent.UpdateMovieByFavorite -> {
-                    setMovieFavorite.execute(
-                        arg = intent.id,
-                        onSuccess = {
+                        },
+                        onError = {
+                            _viewState.emit(SearchMovieState.Error(it.message.toString()))
                         }
                     )
                 }

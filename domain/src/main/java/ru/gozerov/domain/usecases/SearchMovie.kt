@@ -10,9 +10,7 @@ class SearchMovie @Inject constructor(
 ) : UseCase<NameWithCategory, List<MovieCard>>() {
 
     override suspend fun loadData(arg: NameWithCategory): List<MovieCard> {
-        return if (arg.name.isEmpty()) emptyList()
-        else
-            moviesRepository.searchMovieByNameAndCategory(arg)
+        return moviesRepository.searchMovieByNameAndCategory(arg)
     }
 
 }

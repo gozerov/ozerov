@@ -15,7 +15,6 @@ import ru.gozerov.presentation.navigation.Screens
 import ru.gozerov.presentation.navigation.findNavigationProvider
 import ru.gozerov.presentation.screens.movie_details.MovieDetailsFragment
 import ru.gozerov.presentation.screens.movie_list.TabType
-import ru.gozerov.presentation.utils.convertDpToPx
 
 
 class MainActivity : AppCompatActivity(), ToolbarHolder {
@@ -34,11 +33,11 @@ class MainActivity : AppCompatActivity(), ToolbarHolder {
             ) {
                 if (fragment is MovieDetailsFragment) {
                     binding.navigateUp.updateLayoutParams<MarginLayoutParams> {
-                        this.topMargin = convertDpToPx(40f)
+                        this.topMargin = resources.getDimension(R.dimen.margin_40).toInt()
                     }
                 } else
                     binding.navigateUp.updateLayoutParams<MarginLayoutParams> {
-                        this.topMargin = convertDpToPx(16f)
+                        this.topMargin = resources.getDimension(R.dimen.margin_16).toInt()
                     }
             }
         }

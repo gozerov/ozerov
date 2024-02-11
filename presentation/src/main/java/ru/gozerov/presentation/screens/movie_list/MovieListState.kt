@@ -1,14 +1,14 @@
 package ru.gozerov.presentation.screens.movie_list
 
-import kotlinx.coroutines.flow.Flow
 import ru.gozerov.domain.models.MovieCard
+import ru.gozerov.domain.models.MovieListData
 
 sealed class MovieListState {
 
     class Empty : MovieListState()
 
     class SuccessMovies(
-        val categoryWithMovies: List<Pair<String, List<MovieCard>>>
+        val movieListData: List<Pair<String, List<MovieListData>>>
     ) : MovieListState()
 
     class SuccessUpdatedMovies(

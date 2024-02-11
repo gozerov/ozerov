@@ -49,10 +49,11 @@ class MovieDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
         changeToolbar(ToolbarState(isContainerVisible = false, isNavUpVisible = true))
         updateStatusBar()
-        binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
         observeState()
+        setupTryAgainGroup()
         return binding.root
     }
 
@@ -68,11 +69,12 @@ class MovieDetailsFragment : Fragment() {
                 viewModel.viewState.collect { state ->
                     when (state) {
                         is MovieDetailsState.Empty -> {
-                            arguments?.getInt(ARG_ID)?.let { id ->
-                                viewModel.handleIntent(MovieDetailsIntent.LoadMovieDetails(id))
-                            }
+                            renderVisibility(isLoading = true, isError = false)
+                            sendLoadIntent()
                         }
+
                         is MovieDetailsState.SuccessMovie -> {
+                            renderVisibility(isError = false)
                             val movie = state.movie
                             binding.poster.load(movie.imageUrl) {
                                 scale(Scale.FIT)
@@ -90,13 +92,26 @@ class MovieDetailsFragment : Fragment() {
                         }
 
                         is MovieDetailsState.Error -> {
-
+                            renderVisibility(isError = true)
                         }
                     }
                 }
             }
 
         }
+    }
+
+    private fun renderVisibility(isLoading: Boolean = false, isError: Boolean) {
+        val mainContainerVisibility = if (isError || isLoading) View.GONE else View.VISIBLE
+        val errorContainerVisibility = if (isError && !isLoading) View.VISIBLE else View.GONE
+        val loadingIndicatorVisibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.txtName.visibility = mainContainerVisibility
+        binding.txtGenres.visibility = mainContainerVisibility
+        binding.poster.visibility = mainContainerVisibility
+        binding.txtCountries.visibility = mainContainerVisibility
+        binding.txtDescription.visibility = mainContainerVisibility
+        binding.errorContainer.tryAgainGroup.visibility = errorContainerVisibility
+        binding.loadingContainer.loadingContainer.visibility = loadingIndicatorVisibility
     }
 
     private fun setGenres(genres: String) {
@@ -123,6 +138,18 @@ class MovieDetailsFragment : Fragment() {
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         binding.txtCountries.text = spannableString
+    }
+
+    private fun setupTryAgainGroup() {
+        binding.errorContainer.tryAgainButton.setOnClickListener {
+            sendLoadIntent()
+        }
+    }
+
+    private fun sendLoadIntent() {
+        arguments?.getInt(ARG_ID)?.let { id ->
+            viewModel.handleIntent(MovieDetailsIntent.LoadMovieDetails(id))
+        }
     }
 
     companion object {

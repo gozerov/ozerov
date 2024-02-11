@@ -1,6 +1,5 @@
 package ru.gozerov.data.movies.repository
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.gozerov.data.movies.cache.MoviesCache
@@ -43,8 +42,19 @@ class MoviesRepositoryImpl @Inject constructor(
     override suspend fun searchMovieByNameAndCategory(data: NameWithCategory): List<MovieCard> =
         withContext(Dispatchers.IO) {
             return@withContext when (data.category) {
-                0 -> moviesCache.searchTopMoviesByName(data.name)
-                1 -> moviesCache.searchFavoriteMoviesByName(data.name)
+                0 -> {
+                    val movies = moviesRemote.getTopMovies().map { it.toMovieCard() }
+                    if (data.name.isEmpty())
+                        return@withContext emptyList()
+                    else
+                        movies.filter { it.name.uppercase().contains(data.name.uppercase()) }
+                }
+                1 -> {
+                    if (data.name.isEmpty())
+                        return@withContext emptyList()
+                    else
+                        moviesCache.searchFavoriteMoviesByName(data.name)
+                }
                 else -> throw IllegalArgumentException("Unknown category!")
             }
         }

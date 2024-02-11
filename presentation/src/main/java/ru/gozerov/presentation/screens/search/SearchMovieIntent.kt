@@ -9,8 +9,4 @@ sealed class SearchMovieIntent {
         val tabType: TabType
     ) : SearchMovieIntent()
 
-    data class UpdateMovieByFavorite(
-        val id: Int
-    ) : SearchMovieIntent()
-
 }

@@ -59,6 +59,7 @@ class SearchMovieFragment : Fragment() {
         changeStatusBar()
         observeState()
         observeSearchField()
+        setupTryAgainGroup()
         return binding.root
     }
 
@@ -91,12 +92,13 @@ class SearchMovieFragment : Fragment() {
                             binding.txtNotFound.visibility = View.VISIBLE
                         }
                         is SearchMovieState.SearchedMovies -> {
+                            renderVisibility(isError = false, state.movies.isEmpty())
                             movieListAdapter.data = state.movies
-                            binding.txtNotFound.visibility =
-                                if (state.movies.isEmpty()) View.VISIBLE else View.GONE
                         }
 
-                        is SearchMovieState.Error -> {}
+                        is SearchMovieState.Error -> {
+                            renderVisibility(isError = true, isFieldEmpty = false)
+                        }
                     }
                 }
             }
@@ -108,6 +110,21 @@ class SearchMovieFragment : Fragment() {
         binding.searchField.doOnTextChanged { text, _, _, _ ->
             viewModel.handleIntent(SearchMovieIntent.SearchByName(text.toString(), tabType))
         }
+    }
+
+    private fun setupTryAgainGroup() {
+        val tabType = TabType.values()[arguments?.getInt(ARG_TAB_TYPE) ?: 0]
+        binding.tryAgainButton.setOnClickListener {
+            viewModel.handleIntent(SearchMovieIntent.SearchByName("", tabType))
+        }
+    }
+    private fun renderVisibility(isError: Boolean, isFieldEmpty: Boolean) {
+        val recyclerVisibility = if (isError || isFieldEmpty) View.GONE else View.VISIBLE
+        val errorContainerVisibility = if (isError) View.VISIBLE else View.GONE
+        val isStubOnEmptyVisibility = if (isFieldEmpty && !isError) View.VISIBLE else View.GONE
+        binding.moviesRecyclerView.visibility = recyclerVisibility
+        binding.txtNotFound.visibility = isStubOnEmptyVisibility
+        binding.tryAgainGroup.visibility = errorContainerVisibility
     }
 
     companion object {

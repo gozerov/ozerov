@@ -69,25 +69,27 @@ class MovieListFragment : Fragment() {
 
     private fun observeViewState() {
         viewLifecycleOwner.lifecycleScope.launch {
-
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect { state ->
                     when (state) {
                         is MovieListState.Empty -> {
+                            renderVisibility(isLoading = true)
                             viewModel.handleIntent(MovieListIntent.LoadMovies)
                         }
 
                         is MovieListState.SuccessMovies -> {
-                            val pagerData = state.categoryWithMovies.map { it.second }
+                            renderVisibility()
+                            val pagerData = state.movieListData.map { it.second }
                             pagerAdapter.data = pagerData
                             binding.moviesViewPager.adapter = pagerAdapter
                             binding.moviesViewPager.currentItem = viewModel.currentTabType.ordinal
-                            val titles = state.categoryWithMovies.map { it.first }
+                            val titles = state.movieListData.map { it.first }
                             configureTabsMediator()
                             setPageListener(titles)
                         }
 
                         is MovieListState.SuccessUpdatedMovies -> {
+                            renderVisibility()
                             val pagerData = state.categoryWithMovies.map { it.second }
                             val titles = state.categoryWithMovies.map { it.first }
                             pagerAdapter.data = pagerData
@@ -96,10 +98,11 @@ class MovieListFragment : Fragment() {
                                 configureTabsMediator()
                                 setPageListener(titles)
                             } else
-                                updateTabs(titles)
+                                updateTabs(viewModel.currentTabType.ordinal, titles)
                         }
 
                         is MovieListState.Error -> {
+                            //this state was handled by adapter
                         }
                     }
                 }
@@ -108,7 +111,7 @@ class MovieListFragment : Fragment() {
     }
 
     private fun configureTabsMediator() {
-        TabLayoutMediator(binding.categoryTabs, binding.moviesViewPager) { t, position ->
+        TabLayoutMediator(binding.categoryTabs, binding.moviesViewPager) { t, _ ->
             t.setCustomView(R.layout.item_tab)
         }.attach()
     }
@@ -117,30 +120,13 @@ class MovieListFragment : Fragment() {
         onPageChangeCallback = object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                val selectedTab = binding.categoryTabs.getTabAt(position)?.customView as TextView
-                val unselectedTabIndex = if (position == 0) 1 else 0
-                val unselectedTab =
-                    binding.categoryTabs.getTabAt(unselectedTabIndex)?.customView as? TextView
-
-                viewModel.currentTabType = if (position == 0) TabType.TOP else TabType.FAVORITE
-                selectedTab.setTextColor(binding.root.context.getColor(R.color.blue_inactive))
-                selectedTab.text = titles[position]
-                unselectedTab?.setTextColor(binding.root.context.getColor(R.color.blue_active))
-                unselectedTab?.text = titles[unselectedTabIndex]
-                changeToolbar(
-                    ToolbarState(
-                        title = selectedTab.text.toString(),
-                        isSearchVisible = true,
-                        currentTabType = viewModel.currentTabType
-                    )
-                )
+                updateTabs(position, titles)
             }
         }
         binding.moviesViewPager.registerOnPageChangeCallback(onPageChangeCallback!!)
     }
 
-    private fun updateTabs(titles: List<String>) {
-        val position = viewModel.currentTabType.ordinal
+    private fun updateTabs(position: Int, titles: List<String>) {
         val selectedTab = binding.categoryTabs.getTabAt(position)?.customView as TextView
         val unselectedTabIndex = if (position == 0) 1 else 0
         val unselectedTab =
@@ -158,6 +144,14 @@ class MovieListFragment : Fragment() {
                 currentTabType = viewModel.currentTabType
             )
         )
+    }
+
+    private fun renderVisibility(isLoading: Boolean = false) {
+        val mainContainerVisibility = if (isLoading) View.GONE else View.VISIBLE
+        val loadingIndicatorVisibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.moviesViewPager.visibility = mainContainerVisibility
+        binding.categoryTabs.visibility = mainContainerVisibility
+        binding.loadingIndicator.visibility = loadingIndicatorVisibility
     }
 
     override fun onDestroyView() {

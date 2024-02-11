@@ -23,6 +23,9 @@ class MovieDetailsViewModel @Inject constructor(
                         arg = intent.id,
                         onSuccess = {
                             _viewState.emit(MovieDetailsState.SuccessMovie(it))
+                        },
+                        onError = {
+                            _viewState.emit(MovieDetailsState.Error(it.message.toString()))
                         }
                     )
                 }
